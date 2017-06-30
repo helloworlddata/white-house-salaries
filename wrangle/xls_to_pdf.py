@@ -29,8 +29,9 @@ def process_wh_salary_workbook(wbpath):
         else:
             # headers have been found
             # don't capture anything if unless
-            # all cells are filled...
-            if all(c for c in cols) and len(cols) == len(HEADERS):
+            # nearly all cells are filled...
+#            if not all(c == '' for c in cols) and len(HEADERS) - len(cols) == 0:
+            if 'Employee' in cols[1] or '$' in cols[2]:
                 yield dict(zip(HEADERS, cols))
 
 

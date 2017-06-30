@@ -24,7 +24,7 @@ if __name__ == '__main__':
     filenames = args.paths
     # check to see if filenames have a proper year in them
 
-    if not all(rxmatch(r'^\d+', basename(fn)) for fn in filenames):
+    if not all(rxmatch(r'^\d{4}\.csv$', basename(fn)) for fn in filenames):
         raise InputError("Not all filenames are in YYYY.csv format: %s" % '\n'.join(filenames))
 
 
@@ -33,7 +33,7 @@ if __name__ == '__main__':
     csvout.writerow(HEADERS)
 
     for fname in filenames:
-        year = basename(fname)
+        year = basename(fname)[0:4]
         with open(fname, 'r') as rf:
             csvin = csv.reader(rf)
             next(csvin) # skip header
