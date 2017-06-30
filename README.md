@@ -90,7 +90,7 @@ Note: the PDF to XLS step was done by ABBYY, i.e. not programmatic.
 
 The [wrangle/xls_to_pdf.py](wrangle/xls_to_pdf.py) command-line script is given a path to a bunch of XLS files (e.g. [data/raw/2017-abbyy-to-xlsx](data/raw/2017-abbyy-to-xlsx)) and compiles them into a single CSV file:
 
-[data/compiled/2017.csv](data/compiled/2017.csv)
+[data/converted/2017.csv](data/converted/2017.csv)
 
 
 ### Compiling
