@@ -14,10 +14,33 @@ For comparison's sake, President Obama's White House salary data was released as
 https://obamawhitehouse.archives.gov/briefing-room/disclosures/annual-records/2016
 
 
+## Inventory
+
+The [data/raw](data/raw) directory contains CSVs from the Obama administration:
+
+- [data/raw/2009.csv](data/raw/2009.csv)
+- [data/raw/2010.csv](data/raw/2010.csv)
+- [data/raw/2011.csv](data/raw/2011.csv)
+- [data/raw/2012.csv](data/raw/2012.csv)
+- [data/raw/2013.csv](data/raw/2013.csv)
+- [data/raw/2014.csv](data/raw/2014.csv)
+- [data/raw/2015.csv](data/raw/2015.csv)
+- [data/raw/2016.csv](data/raw/2016.csv)
+- (TODO) Use csvkit's csvstack to create one large file
+
+From the 2017 release:
+
+- The raw PDF: [data/raw/2017.pdf](data/raw/2017.pdf)
+- ABBYY's conversion of that PDF to XLSX (one file for each sheet): [data/raw/2017-abbyy-to-xlsx/](data/raw/2017-abbyy-to-xlsx/)
+- (TODO) Using **in2csv** and other csvkit tools to compile those Excel spreadsheets into one plaintext CSV.
+
+
+
+
+### Fetching
 
 
 Quickie script to get everything:
-
 
 
 ```sh
