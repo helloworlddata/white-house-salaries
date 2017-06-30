@@ -1,6 +1,15 @@
 # White House Salaries
 
 
+tl;dr: White House salaries for all staffers, from 2009 to the just-released 2017 list, compiled in one file:
+
+[data/compiled/white-house-salaries.csv](data/compiled/white-house-salaries.csv)
+
+Warning: File has not been double-checked or even spot-checked for errors (2017-06-30)
+
+
+-------
+
 Today, the Trump administration published White House Staff Salary data at the following URL:
 
 https://www.whitehouse.gov/staff-salaries
@@ -40,7 +49,7 @@ From the 2017 release:
 ### Fetching
 
 
-Quickie script to get everything:
+Quickie shell commands to download the files and save them to `data/raw`
 
 
 ```sh
@@ -61,9 +70,6 @@ curl -Lo data/raw/2014.csv \
 curl -Lo data/raw/2013.csv \
   https://open.obamawhitehouse.archives.gov/sites/default/files/2013_Report_to_Congress_on_White_House_Staff.csv
 
-
-
-
 curl -Lo data/raw/2012.csv \
   https://open.obamawhitehouse.archives.gov/sites/default/files/2012_Annual_Report_to_Congress_on_White_House_Staff.csv
 
@@ -76,3 +82,26 @@ curl -Lo data/raw/2010.csv \
 curl -Lo data/raw/2009.csv \
   https://open.obamawhitehouse.archives.gov/sites/default/files/2009_Report_to_Congress_on_White_House_Staff.csv
 ```
+
+
+### Converting
+
+Note: the PDF to XLS step was done by ABBYY, i.e. not programmatic.
+
+The [wrangle/xls_to_pdf.py](wrangle/xls_to_pdf.py) command-line script is given a path to a bunch of XLS files (e.g. [data/raw/2017-abbyy-to-xlsx](data/raw/2017-abbyy-to-xlsx)) and compiles them into a single CSV file:
+
+[data/compiled/2017.csv](data/compiled/2017.csv)
+
+
+### Compiling
+
+Use [wrangle/compile.py](wrangle/compile.py) to read all the CSV files, add a year column, and compile them to the final file:
+
+[data/compiled/white-house-salaries.csv](data/compiled/white-house-salaries.csv)
+```sh
+$ python wrangle/compile.py \
+  data/raw/*.csv data/converted/2017.csv \
+  > data/compiled/white-house-salaries.csv
+```
+
+
