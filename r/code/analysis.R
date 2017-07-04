@@ -14,9 +14,16 @@ salaries %>%
             staffSize = n())
 
 top10 <- salaries %>% 
-  filter(year == 2017) %>% 
+  filter(year == 2003) %>% 
   arrange(desc(salary)) %>% 
   top_n(10, salary)
+
+press <- salaries %>% 
+  filter(grepl("press secretary", position)) %>% 
+  group_by(position, year) %>% 
+  summarize(count = n(),
+            medianSalary = median(salary)) %>% 
+  add_tally(count)
 
 salaries %>% 
   filter(tolower(position) == 'senior policy advisor') %>% 
