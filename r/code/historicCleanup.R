@@ -128,7 +128,7 @@ salaries08 %<>%
 salariesNew %<>% 
   select(employee_name, salary, position, year, status)
 
-salaries <- rbind(salariesNew, salaries03, salaries04, salaries05, salaries06, salaries07, salaries08)
+salaries <- rbind(salariesNew, salaries01, salaries03, salaries04, salaries05, salaries06, salaries07, salaries08)
 
 salaries %<>% 
   mutate(employee_name = tolower(gsub("\\.", "", employee_name)),
