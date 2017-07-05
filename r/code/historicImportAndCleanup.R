@@ -143,10 +143,21 @@ salaries <-
     president = ifelse(between(year, 2001, 2007), 'bush', 
                        ifelse(between(year, 2008, 2016), 'obama', 'trump')),
     term = as.factor(ifelse(between(year, 2001, 2004) | between(year, 2008, 2012) | 
-                              between(year, 2017, 2021), 'first','second'))) %>%  
-  filter(!is.na(salary)) %>% 
+                              between(year, 2017, 2021), 'first','second')),
+    name = strsplit(employee_name," ") %>% 
+      lapply(function(e) e[2])%>% 
+      unlist()) %>%  
+  filter(!is.na(salary))
+
+gender <- gender(salaries$name) %>% 
+  distinct(name, gender)
+
+salaries %<>% 
+  left_join(gender, "name") %>% 
+  mutate(gender = as.factor(ifelse(is.na(gender), 'male', gender))) %>% 
+  select(-name) %>% 
   write_csv('data/compiled/white-house-salaries.csv')
 
 rm(list = c('salariesNew', 'salaries01', 'salaries03', 'salaries04', 
             'salaries05', 'salaries06', 'salaries07', 'salaries08', 
-            'wp01', 'wp03', 'wp04', 'wp05', 'wp06', 'wp07', 'wp08'))
+            'wp01', 'wp03', 'wp04', 'wp05', 'wp06', 'wp07', 'wp08', 'gender'))
