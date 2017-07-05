@@ -138,11 +138,11 @@ salaries <-
     status = as.factor(tolower(status)),
     salary = as.double(gsub("\\$|\\,", "", salary)),
     position = tolower(position),
-    party = as.factor(ifelse(between(year, 2001, 2007) | 
+    party = as.factor(ifelse(between(year, 2001, 2008) | 
                                between(year, 2017, 2021), 'republican',  'democrat')),
-    president = ifelse(between(year, 2001, 2007), 'bush', 
-                       ifelse(between(year, 2008, 2016), 'obama', 'trump')),
-    term = as.factor(ifelse(between(year, 2001, 2004) | between(year, 2008, 2012) | 
+    president = ifelse(between(year, 2001, 2008), 'bush', 
+                       ifelse(between(year, 2009, 2016), 'obama', 'trump')),
+    term = as.factor(ifelse(between(year, 2001, 2004) | between(year, 2009, 2013) | 
                               between(year, 2017, 2021), 'first','second')),
     name = strsplit(employee_name," ") %>% 
       lapply(function(e) e[2])%>% 

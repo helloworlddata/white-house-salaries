@@ -164,6 +164,12 @@ salaries %>%
   geom_point(position=position_jitter(width=.11),col="grey") +
   geom_boxplot(alpha=0.5)
 
+salaries %>%
+  group_by(year = as.factor(year)) %>% 
+  ggplot(aes(year, salary, fill = gender)) +
+  geom_boxplot(alpha = .5) +
+  ggtitle('Boxplot: Gender & Salaries')
+
 ggplotly(salaries %>%
            filter(status == 'employee') %>% 
            group_by(year, gender) %>%
