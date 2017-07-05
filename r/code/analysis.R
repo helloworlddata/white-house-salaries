@@ -1,6 +1,3 @@
-library(tidyverse)
-library(magrittr)
-
 salaries %>%
   group_by(president, party, term) %>% 
   summarize(medianSalary = median(salary),
@@ -13,17 +10,15 @@ salaries %>%
             meanSalary = mean(salary),
             staffSize = n())
 
+salaries %>% 
+  group_by(year) %>% 
+  summarize(medianSalary = median(salary)) %>% 
+  ggplot(aes(year, medianSalary)) +
+  geom_line()
+
 top10 <- salaries %>% 
-  filter(year == 2003) %>% 
   arrange(desc(salary)) %>% 
   top_n(10, salary)
-
-press <- salaries %>% 
-  filter(grepl("press secretary", position)) %>% 
-  group_by(position, year) %>% 
-  summarize(count = n(),
-            medianSalary = median(salary)) %>% 
-  add_tally(count)
 
 salaries %>% 
   filter(tolower(position) == 'senior policy advisor') %>% 
@@ -38,23 +33,17 @@ salaries %>%
   ggplot(aes(status, salary)) +
   geom_boxplot()
 
-salaries %>% 
-  group_by(year) %>% 
-  summarize(medianSalary = median(salary)) %>% 
-  ggplot(aes(year, medianSalary)) +
-  geom_line()
-
-sixteeners <- salaries %>% 
+longestStaff <- salaries %>% 
   group_by(employee_name) %>% 
   summarize(years = n()) %>% 
   filter(years == 16)
 
-for (i in 1:length(sixteeners$employee_name)) {
+for (i in 1:length(longestStaff$employee_name)) {
   print(salaries %>% 
-    filter(grepl(sixteeners$employee_name[[i]], employee_name)) %>% 
+    filter(grepl(longestStaff$employee_name[[i]], employee_name)) %>% 
     ggplot(aes(year, salary)) +
     geom_line() +
-    ggtitle(sixteeners$employee_name[[i]]))
+    ggtitle(longestStaff$employee_name[[i]]))
 }
 
 yearCount <- salaries %>% 
@@ -82,7 +71,6 @@ specialAssistant %>%
   geom_line() +
   ggtitle(specialAssistant$position[[1]])
 
-# assistant <- 
 for(p in 1:10) {
   print(salaries %>% 
           # filter(grepl('assistant to the president', position)) %>% 
@@ -95,3 +83,67 @@ for(p in 1:10) {
           geom_line() +
           ggtitle(positions$position[[p]]))
 }
+
+## Office Analysis
+
+# Counselor To The President: https://en.wikipedia.org/wiki/Counselor_to_the_President
+plotly::ggplotly(salaries %>% 
+                   filter(grepl('bartlett, dan|gillespie, ed|rouse, pe|
+                                podesta, jo|conway, kel|bannon, ste', 
+                                employee_name)) %>% 
+                   group_by(year) %>% 
+                   summarize(medianSalary = median(salary)) %>% 
+                   ggplot(aes(year, medianSalary)) +
+                   geom_line(size = 1.5) +
+                   ggtitle('Counselor To The President - Median Salary'))
+
+# White House Chief of Staff: https://en.wikipedia.org/wiki/List_of_White_House_Chiefs_of_Staff
+plotly::ggplotly(salaries %>% 
+                   filter(grepl('card, an|bolten, jo|emanuel, ra|rouse, pe|
+                                daley, bi|lew, ja|mcdonough, de|priebus, re',
+                                employee_name)) %>% 
+                   group_by(year) %>% 
+                   summarize(medianSalary = median(salary)) %>% 
+                   ggplot(aes(year, medianSalary)) +
+                   geom_line(size = 1.5) +
+                   ggtitle('Chief of Staff - Median Salary'))
+
+# Executive Office of The President: 
+# https://en.wikipedia.org/wiki/Executive_Office_of_the_President_of_the_United_States
+plotly::ggplotly(salaries %>% 
+                   filter(grepl('assistant to the president', position)) %>%
+                   mutate(level = ifelse(grepl('^assistant', position), 'senior assistant', 
+                                         ifelse(grepl('^special', position), 
+                                                'special assistant', 'deputy assistant'))) %>% 
+                   group_by(year, level) %>%
+                   summarize(n = n(), 
+                       medianSalary = median(salary)) %>% 
+                   ggplot(aes(year, medianSalary)) +
+                   geom_line(aes(color = level)))
+
+# National Security Advisor: https://en.wikipedia.org/wiki/National_Security_Advisor_(United_States)
+plotly::ggplotly(salaries %>% 
+                   filter(grepl('donilon, to|rice, su|jones, ja|hadley, st|
+                                rice, con|flynn, mi|kellogg, ke|mcmaster, h',
+                                employee_name)) %>% 
+                   group_by(year) %>% 
+                   summarize(medianSalary = median(salary)) %>% 
+                   ggplot(aes(year, medianSalary)) +
+                   geom_line() +
+                   ggtitle('National Security Advisor - Median Salary'))
+
+plotly::ggplotly(salaries %>%
+                  filter(grepl('lady', position)) %>% 
+                  group_by(year) %>% 
+                  summarize(medianSalary = median(salary)) %>% 
+                  ggplot(aes(year, medianSalary)) +
+                  geom_line() +
+                  ggtitle('Office Of The First Lady - Median Salary'))
+
+# White House Counsel: https://en.wikipedia.org/wiki/White_House_Counsel
+counselToPresident <- salaries %>% 
+  filter(grepl('miers, ha|fielding, fr|craig, gr|bauer|ruemmler|
+               eggleston|mcgahn', employee_name)) %>% 
+  group_by(year) %>% 
+  summarize(count = n()) %>% 
+  arrange(year)
