@@ -147,3 +147,38 @@ counselToPresident <- salaries %>%
   group_by(year) %>% 
   summarize(count = n()) %>% 
   arrange(year)
+
+## Gender Analysis
+
+salaries %<>% 
+  mutate(name = strsplit(employee_name," ") %>% 
+           lapply(function(e) e[2]) %>% unlist())
+
+gender <- gender(salaries$name) %>% 
+  distinct(name, gender)
+
+salaries %<>% 
+  left_join(gender, "name") %>% 
+  mutate(gender = as.factor(ifelse(is.na(gender), 'male', gender))) %>% 
+  select(-name)
+
+salaries %>% 
+  group_by(gender) %>%
+  tally() %>% 
+  ggplot(aes(gender, n)) +
+  geom_bar(stat = 'identity')
+
+salaries %>% 
+  filter(year == 2017) %$% 
+  t.test(salary[gender == 'male'], salary[gender == 'female'])
+
+salaries %>% 
+  ggplot(aes(gender, salary, fill = gender)) +
+  geom_point(position=position_jitter(width=.11),col="grey") +
+  geom_boxplot(alpha=0.5)
+
+salaries %>% 
+  group_by(year, gender) %>%
+  summarize(medianSalary = median(salary)) %>% 
+  ggplot(aes(year, medianSalary)) +
+  geom_line(aes(color = gender))
