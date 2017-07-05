@@ -1,10 +1,10 @@
 library(tidyverse)
 library(magrittr)
 
-salaries %<>% 
-  mutate(salary = as.double(gsub("\\$|\\,", "", salary)),
-         position = tolower(position),
-         employee_name = tolower(employee_name))
+salaries %>%
+  group_by(president, party, term) %>% 
+  summarize(medianSalary = median(salary),
+            meanSalary = mean(salary))
 
 salaries %>% 
   filter(!is.na(salary)) %>% 
@@ -44,17 +44,17 @@ salaries %>%
   ggplot(aes(year, medianSalary)) +
   geom_line()
 
-fifteeners <- salaries %>% 
+sixteeners <- salaries %>% 
   group_by(employee_name) %>% 
   summarize(years = n()) %>% 
-  filter(years == 15)
+  filter(years == 16)
 
-for (i in 1:length(fifteeners$employee_name)) {
+for (i in 1:length(sixteeners$employee_name)) {
   print(salaries %>% 
-    filter(grepl(fifteeners$employee_name[[i]], employee_name)) %>% 
+    filter(grepl(sixteeners$employee_name[[i]], employee_name)) %>% 
     ggplot(aes(year, salary)) +
     geom_line() +
-    ggtitle(fifteeners$employee_name[[i]]))
+    ggtitle(sixteeners$employee_name[[i]]))
 }
 
 yearCount <- salaries %>% 

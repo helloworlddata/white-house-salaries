@@ -1,3 +1,4 @@
 library(tidyverse)
+library(magrittr)
 
-salariesNew <- read_csv('../data/compiled/white-house-salaries.csv')
+salaries <- read_csv('data/compiled/white-house-salaries.csv')
