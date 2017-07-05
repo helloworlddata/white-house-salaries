@@ -1,3 +1,3 @@
 # White House Salaries
 
-An exploratory data analysis of White House Salaries between 2003 and 2017.
+An exploratory data analysis of White House Salaries between 2001 and 2017.
