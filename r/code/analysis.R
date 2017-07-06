@@ -5,7 +5,7 @@ salaries %>%
 
 salaries %>% 
   filter(!is.na(salary)) %>% 
-  group_by(year) %>% 
+  group_by(year, president, party, term) %>% 
   summarize(medianSalary = median(salary),
             meanSalary = mean(salary),
             staffSize = n())
@@ -41,9 +41,9 @@ yearCount %>%
 
 positions <- salaries %>% 
   group_by(position) %>% 
-  summarize(n = n(),
-            count = n_distinct(year)) %>% 
-  arrange(desc(n))
+  summarize(count = n()) %>% 
+  arrange(desc(count)) %>% 
+  top_n(10, count)
 
 specialAssistant <- salaries %>% 
   filter(position == 'special assistant to the president and associate counsel to the president')

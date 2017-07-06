@@ -1,0 +1,115 @@
+---
+title: "Presidental First Term Analysis"
+date: '`r format(Sys.Date(), "%m-%d-%Y")`'
+output: 
+  github_document:
+    html_preview: FALSE
+  pdf_document:
+    toc: false
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+```
+
+## Comparing Pay Among First-term Presidents
+
+Recently the Trump Administration released it's first report of what they
+pay their staff. I thought it would be interesting to do an analysis that
+compares it to past EOP offices.
+
+For this analysis, we are going to look at the first year of Presidents 
+Trump, Obama and Bush.
+
+```{r firstTerm, echo= FALSE}
+salaries %>% 
+  group_by(president) %>% 
+  filter(grepl("2001|2009|2017", year)) %>% 
+  summarize(salary = median(salary)) %>% 
+  knitr::kable()
+```
+
+`r ifelse(median(salaries$salary[salaries$year == 2017]) > median(salaries$salary[salaries$year == 2009]), paste("Here we see that Trump's median salary of", median(salaries$salary[salaries$year == 2017]), "is greater than both former president Bush and Obama.", sep = " "), aste("Here we see that Trump's median salary of", median(salaries$salary[salaries$year == 2017]), "is less than both former president Bush and Obama.", sep = " "))`
+
+That could be expected as wages should increase with cost of living over time.
+
+The next question I have is: How many Trump staffers are paid the maximum
+compared to previous administrations? Let's take a look:
+
+```{r highestPaidEmployees, echo = FALSE}
+salaries %>% 
+  filter(status == 'employee',
+         grepl("2001|2009|2017", year)) %>% 
+  group_by(president, salary) %>%
+  summarize(count = n()) %>% 
+  arrange(desc(salary)) %>% 
+  top_n(1, salary) %>% 
+  knitr::kable()
+```
+
+In this piece of analysis, I have excluded detailees, as their salaries are 
+paid by other departments. Here I've found that Trump ties Obama for having 
+the largest count of highest paid employees on staff during the first year
+of their first term. Let's take another look visually to confirm what we're
+seeing:
+
+```{r payBoxplot, echo = FALSE}
+salaries %>% 
+  filter(status == 'employee',
+         grepl("2001|2009|2017", year)) %>%
+  group_by(president) %>% 
+  ggplot(aes(president, salary)) +
+  geom_boxplot(aes(fill = president)) +
+  ggtitle('First Year, First Term Salaries By President')
+```
+
+## Staff Sizes
+
+Let's take a look at staff sizes and salaries over time:
+
+```{r staffSize, echo = FALSE}
+salaries %>% 
+  filter(grepl("2001|2009|2017", year)) %>% 
+  filter(!is.na(salary)) %>% 
+  group_by(year, president, party, term) %>% 
+  summarize(medianSalary = median(salary),
+            meanSalary = mean(salary),
+            staffSize = n()) %>% 
+  knitr::kable()
+```
+
+Here it appears that President Trump is spending more per staff over all,
+but with a smaller staff size. This could be problematic for the president
+in the long run.
+
+
+So who are these top paid staff members of Trump's administration?
+
+```{r staff, echo = FALSE}
+salaries %>% 
+  filter(year == 2017) %>% 
+  arrange(desc(salary)) %>% 
+  top_n(10, salary) %>% 
+  select(employee_name, position, salary, status) %>% 
+  knitr::kable()
+```
+
+Other than Mark House who is a detailee, all are employees. Probably one
+of the more well known employees is Steve Bannnon, who is listed as 
+Assistant to the President and Chief Strategist and Senior Counselor.
+
+As it's noted in Wikipedia, each president gets to choose their own cabinet,
+which means they can also give out their own titles as well. That makes an
+analysis more difficult, so let's look and see if other presidents retain
+a senior counsel on staff.
+
+```{r seniorCounsel, echo = FALSE}
+salaries %>% 
+  filter(grepl('senior counsel', position)) %>% 
+  select(- party, -term, -gender) %>% 
+  arrange(desc(year)) %>% 
+  knitr::kable()
+```
+
+Also of note, Assistants, Special Assistants and Deputy Assistants all
+indicate different roles within office tiers.
