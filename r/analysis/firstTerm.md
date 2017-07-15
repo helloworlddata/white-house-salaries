@@ -1,4 +1,4 @@
-Presidental First Term Analysis
+Presidential First Term Analysis
 ================
 
 Comparing Pay Among First-term Presidents
