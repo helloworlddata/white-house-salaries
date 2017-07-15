@@ -1,10 +1,11 @@
-Presidential First Term Analysis
+Presidential First Term Analysis of Salaries
 ================
+07-15-2017
 
-Comparing Pay Among First-term Presidents
------------------------------------------
+Comparing Median Salary Among First-term Presidential Staff
+-----------------------------------------------------------
 
-Recently the Trump Administration released it's first report of what they pay their staff. I thought it would be interesting to do an analysis that compares it to past EOP offices.
+Recently the Trump Administration released the first report of staff salaries. I thought it would be interesting to do an analysis that compares it to past EOP offices.
 
 For this analysis, we are going to look at the first year of Presidents Trump, Obama and Bush.
 
