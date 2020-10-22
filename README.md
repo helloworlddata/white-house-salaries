@@ -1,5 +1,16 @@
 # White House Salaries
 
+----------------
+
+### Deprecation note
+
+This repo has been deprecated and archived as of 2020-10-22.
+
+Find the new repo with new data at: https://github.com/storydrivendatasets/white_house_salaries
+
+
+
+-----------------
 
 tl;dr: White House salaries for all staffers, from 2009 to the just-released 2017 list, compiled in one file:
 
